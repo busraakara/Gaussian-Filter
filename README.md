@@ -22,8 +22,13 @@ We use convolution in image processing to filter imges.
 For this first look at the formula of the Gaussian Filter.
 
 The Gaussian filter can be expressed as:
+```math
+G(x,y) = Divide[1,2πSquare[σ]]Power[ⅇ,-Divide[Square[x]+Square[y],2Square[σ]]]
 
-\[ G(x, y) = \frac{1}{2 \pi \sigma^2} e^{-\frac{x^2 + y^2}{2 \sigma^2}} \]
+G(x, y) = exp(-(x^2 + y^2)/(2 σ^2))/(2 π σ^2)
+```
+
+$`\[ G(x, y) = \frac{1}{2 \pi \sigma^2} e^{-\frac{x^2 + y^2}{2 \sigma^2}} \]`$
 
 Here,
 - \( G(x, y) \): Value of the Gaussian filter at position (x, y),
