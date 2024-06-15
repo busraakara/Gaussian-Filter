@@ -1,6 +1,10 @@
 
 # Gaussian Filter
 
+Hii! 
+
+In this repository, i wanted to explain how convolution work on Gaussian Filter that we use in image processing. You may think that I have explained too much but since the Gaussian Filter is fundemental and basic operation in image processing, I wanted to explain it in detail and make it easier for those who are new to this field.
+
 ### What is Gaussian Filter?
 A Gaussian filter is a linear filter that is typically used to blur images and remove noise. It is based on the Gaussian distribution and applies a convolution kernel to the image, smoothing the pixel values.
 
@@ -12,109 +16,55 @@ photoshop applications for smooth images.
 ### What is the difference between 2D and 3D Gaussian Filter?
 Well the main difference is 'Digital Image Dimension'. 
 2D image consist of x and y axes. The x-axis represents the length and the y-axis represents the width. That makes 2D images gray scale because they have only 1 channel. (gray channel)
-3D images consist of x, y and z axes. z-axes represents the 3 channels and color images are formed by the combination of these B, G, R channels.
-
-We use convolution in image processing to filter imges. 
+3D images consist of x, y and z axes. z-axes represents the 3 channels and color images are formed by the combination of these B, G, R channels. We use convolution in image processing to filter imges. And we perform convolution on channels. If we perform convolution on 1 channel gray image, than it is 2D Filtering and if we perform it on 3 channel color image, than it is 3D Filteirng.
 
 **Keep in mind!** : Do not think of the dimensions in the pictures as in real life. In digital pictures, 2 dimensions represent the gray image and 3 dimensions represent the colored image. There is a concept of depth in both pictures. In real life, we express depth with 3 dimensions, but in the picture, the pixel values ​​​​are between 0-255 and these express depth.
 
-### How do we apply 2D and 3D Gaussian Filters?
+## How do we apply 2D and 3D Gaussian Filters?
+
 For this first look at the formula of the Gaussian Filter.
 
 The Gaussian filter can be expressed as:
-```math
-G(x,y) = Divide[1,2πSquare[σ]]Power[ⅇ,-Divide[Square[x]+Square[y],2Square[σ]]]
 
-G(x, y) = exp(-(x^2 + y^2)/(2 σ^2))/(2 π σ^2)
-```
-
-$`\[ G(x, y) = \frac{1}{2 \pi \sigma^2} e^{-\frac{x^2 + y^2}{2 \sigma^2}} \]`$
+$`G(x, y) = \frac{1}{2 \pi \sigma^2} e^{-\frac{x^2 + y^2}{2 \sigma^2}}`$
 
 Here,
-- \( G(x, y) \): Value of the Gaussian filter at position (x, y),
-- \( \sigma \): Standard deviation parameter,
-- \( x \) and \( y \): Coordinates considered as distances from the center of the filter.
+- $`G(x, y)`$ : Value of the Gaussian filter at position (x, y),
+- $` σ `$ : Standard deviation parameter,
+- $x$ and $y$ : Coordinates considered as distances from the center of the filter.
 
 **Are we gonna use this formula?**
-No :)
-We are just gonna use the Convolution between matrices.
 
-We can represent these Gauss formulas using kernels. Gaussian formulas are also 3D graphs, and you can turn these 3D graphs into 2D kernels to use in convolution. 
-Here is the reperesentation of turning Gauss graph into 2d kernel. If we look at the Gaussian Graph from above, we see the picture on the right. 
+No :)
+We use convolution in image processing to filter imges. We are just gonna use the Convolution with Gaussian kernel that we get from Gaussian Graph.
+We can represent this Gauss formula using kernels. Gaussian is also 3D graphs, and you can turn this 3D graph into 2D kernel to use in convolution. 
+
+Here is the reperesentation of turning Gauss graph into 2d kernel. If we look at the Gaussian Graph from above, we see the picture on the right. We can think this image as a matrix that every pixel is representing a value that Gaussian graph takes. 
 
 ![1_PaZx8eCc7bWaERP6eP5JjA](https://github.com/busraakara/Gaussian-Filter/assets/105877486/91a93e51-7b7d-436c-8e16-d1c7c8524c8b)
 
+Here are some Gaussian kernels we get from Graph. They can be 3x3, 5x5, 7x7, 9x9 and any odd matrix size. But in image processing, we mostly use 3x3, 5x5 or 7x7.
 
+!!!You can also get these kernels using Gaussian formula.
 
-Gaussian filters are primarily used for:
-- **Noise Reduction:** They effectively reduce noise and graininess in images by averaging pixel values.
-- **Blur Effect:** They create a blur effect which can be used for artistic purposes or to prepare images for further processing.
-- **Scale Space Representation:** They are fundamental in scale-space theory for representing images at different scales.
+![Discrete-approximation-of-the-Gaussian-kernels-3x3-5x5-7x7](https://github.com/busraakara/Gaussian-Filter/assets/105877486/dc8736bd-f842-4dc3-8b7a-869d9f02bd37)
 
-## Differences between 2D Gauss Filter and 3D Gauss Filter
+**How do we perform convolution?**
 
-### 2D Gaussian Filter:
-- **Application:** Used for processing 2D images, such as photographs or frames of videos.
-- **Kernel Shape:** Uses a 2D Gaussian distribution for convolution.
-- **Output:** Produces a smoothed 2D image where each pixel is a weighted average of its neighbors based on Gaussian weights.
+Here is a representaition of convolution. Input image is our original image channel, filter is our kernel (Gaussian kernel in this case) and output image is our filtered image channel. Let's assume we are using 3x3 Gaussian kernel. Starting from the 3x3 piece in the upper left corner of the original image, we first move to the right one by one and come to the end, then move down one row and move from left to right one by one again. In each shift, we multiply each index pixel of the kernel matrix by the corresponding index pixel in the image matrix, then we add the multiplied 9 values, this result gives the new value of the pixel in the middle of the piece we are in. And we continue this process until the entire image is scanned. 
 
-### 3D Gaussian Filter:
-- **Application:** Primarily used in processing 3D volumetric data, such as medical imaging (CT scans, MRI).
-- **Kernel Shape:** Uses a 3D Gaussian distribution for convolution, considering neighboring voxels.
-- **Output:** Smoothes volumetric data, reducing noise and providing a blurred representation in the 3D space.
+![Image-convolution-with-an-input-image-of-size-7-7-and-a-filter-kernel-of-size-3-3](https://github.com/busraakara/Gaussian-Filter/assets/105877486/7f65b9e8-6e97-456a-835d-cfa536d5d098)
 
-In summary, while both filters operate on the principle of Gaussian distribution and convolution, the main difference lies in their application domains (2D images vs. 3D volumes) and the dimensionality of their convolution kernels.
+But if you noticed, the output image size is smaller than the original image because of the convolution. Therefore, before starting the convolution, we add extra pixels around the image to make the size the same and this called zero padding. And thats how you perform convolution on single channel. For 3D Gaussian Filter, you have to perform convolution for each channel and merge  them together.
 
+## Let's look at the filtered image results from my code.
 
-# Gaussian-Filter
-Implementation of Gaussian Blur Filter on Images
+**2D GAUSSIAN FILTER**
 
-## What is Gaussian Filter?
-A Gaussian filter, in the context of image processing and signal processing, is a type of linear filter used to blur images or reduce noise by averaging out the intensity values of pixels. It is named after the Gaussian function (bell curve) that defines its shape.
+![2d_gauss](https://github.com/busraakara/Gaussian-Filter/assets/105877486/8f14931d-11f4-41df-9339-424c9d40357a)
 
-Here are some key characteristics and uses of a Gaussian filter:
+**3D GAUSSIAN FILTER**
 
-1. **Smoothing Effect**: Gaussian filters are primarily used for smoothing images. They achieve this by applying a convolution operation with a Gaussian kernel, which gives more weight to the central pixels (near the filter's center) and less weight to pixels farther away, following the Gaussian distribution.
+![3d_gauss](https://github.com/busraakara/Gaussian-Filter/assets/105877486/90358bc2-af37-405c-aeac-f7f6748b64cb)
 
-2. **Noise Reduction**: By averaging the pixel values in a neighborhood around each pixel, Gaussian filters effectively reduce high-frequency noise in images. High-frequency noise often appears as small, rapid changes in intensity, which can be smoothed out by the filter.
-
-3. **Kernel Size**: The size of the Gaussian kernel determines the extent of the smoothing effect. A larger kernel will blur the image more, while a smaller kernel will provide less smoothing.
-
-4. **Mathematical Formulation**: The Gaussian kernel \( G(x, y, \sigma) \) is defined as:
-   \[ G(x, y, \sigma) = \frac{1}{2\pi \sigma^2} e^{-\frac{x^2 + y^2}{2\sigma^2}} \]
-   Here, \( \sigma \) controls the standard deviation of the Gaussian distribution, determining the spread or width of the filter.
-
-5. **Application**: Gaussian filters are used in various applications including image processing (e.g., edge detection after smoothing), computer vision (e.g., feature extraction), and noise reduction in signals.
-
-6. **Properties**: They are linear, shift-invariant filters, which means they preserve the overall shape and structure of the image while reducing noise and details.
-
-In summary, a Gaussian filter is a versatile tool for image enhancement and noise reduction, leveraging the smooth, symmetric properties of the Gaussian function to achieve effective results in various applications.
-
-## What is the difference between 2D Gauss Filter and 3D Gauss Filter?
-
-The difference between a 2D Gaussian filter and a 3D Gaussian filter lies primarily in their dimensions and application domains:
-
-1. **Dimensions**:
-   - **2D Gaussian Filter**: Operates on 2-dimensional images where each pixel has two spatial dimensions (typically x and y coordinates). The filter is applied across these two dimensions to smooth or blur the image.
-   
-   - **3D Gaussian Filter**: Operates on 3-dimensional data where each voxel (volume pixel) has three spatial dimensions (x, y, and z coordinates). This is commonly used in volumetric data such as medical imaging (CT scans, MRI) or video processing where each frame has depth information.
-
-2. **Kernel Shape**:
-   - **2D Gaussian Kernel**: The kernel is a 2D matrix defined by the Gaussian function \( G(x, y, \sigma) \):
-     \[ G(x, y, \sigma) = \frac{1}{2\pi \sigma^2} e^{-\frac{x^2 + y^2}{2\sigma^2}} \]
-     This kernel is applied to each pixel neighborhood in the x and y directions of the image.
-
-   - **3D Gaussian Kernel**: The kernel is a 3D volume defined similarly, extending into the z direction:
-     \[ G(x, y, z, \sigma) = \frac{1}{(2\pi \sigma^2)^{3/2}} e^{-\frac{x^2 + y^2 + z^2}{2\sigma^2}} \]
-     Here, \( x, y, z \) are the spatial coordinates in the 3D space. The filter is applied across three spatial dimensions, smoothing in all directions.
-
-3. **Application**:
-   - **2D Gaussian Filter**: Used primarily for image processing tasks on 2D images, such as blurring, noise reduction, edge detection (often after smoothing), and feature extraction in computer vision.
-   
-   - **3D Gaussian Filter**: Applied to 3D data like volumetric images (medical scans, 3D reconstructions from multiple viewpoints), video sequences where depth is considered, or any data that extends into three spatial dimensions. It is used for similar purposes as the 2D version but in 3D space.
-
-4. **Implementation**:
-   - Both filters are implemented similarly using convolution operations, where the Gaussian kernel is convolved with the image or volumetric data to achieve the desired smoothing or blurring effect.
-
-In summary, the key difference between 2D and 3D Gaussian filters is the number of spatial dimensions they operate on: 2D for images and 3D for volumetric data. They both leverage the Gaussian function to apply smoothing or blurring effects, tailored to their respective dimensional contexts.
-
+This was a summary of how to perform 2D and 3D Gaussian Filters using Convolution. If you have any questions, don't hesitate to ask me.
